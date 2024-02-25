@@ -13,15 +13,19 @@ export const login = async (req, res) => {
     if (!(username && password)) {
       res.status(400).send(msjError);
     } else {
-      const user = await validateUser(username);
+      let user = await validateUser(username);
 
-      if (user && (await verified(password, user.passHash))) {
+      if (user && (await verified(password, user.password))) {
         const token = jwt.sign({ role }, TOKEN_KEY, { expiresIn: "2h" });
+        console.log(token)
 
-        res_user.role = user.role;
-        res_user.token = token;
+        if(token){
+          res_user = JSON.parse(JSON.stringify(user))
+          delete res_user.password;
+          res_user.token = token;
 
-        res.status(200).json(res_user);
+          res.status(200).json(res_user);
+        }
       } else {
         res.status(403).json(msjError);
       }
@@ -31,4 +35,3 @@ export const login = async (req, res) => {
     res.status(500).json(err);
   }
 };
-
