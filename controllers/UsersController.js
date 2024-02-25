@@ -109,23 +109,18 @@ export const deleteUsers = async(req, res) => {
     }
 }
 
-
-//Validacion de usuarios
+//Validacion de usuario 
 export const validateUser = async (username) => {
-    let user= {};
     try {
         const resUser = await usersModel.findOne({
-            attributes: ['role','password','username','first_name','last_name','role','email','phone','grade','created_at','updated_at'],
+            attributes: ['role','password','username','first_name','last_name'],
             where:{username:username}
         })
         
-        if(resUser){
-            user.role = resUser.dataValues.role
-            user.passHash = resUser.dataValues.password
-  
-            return user
+        if(resUser){           
+            return resUser.dataValues
         }else{
-            return user = {}
+            return resUser
         }
   
     } catch (error) {
