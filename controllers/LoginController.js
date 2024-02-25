@@ -4,13 +4,14 @@ import jwt from "jsonwebtoken";
 import { TOKEN_KEY } from "../d_config.js";
 let role;
 let res_user = {};
+let msjError = {"Error":"Asegúrese de introducir los datos de su registro actual. En caso de NO poder iniciar sesión, póngase en contacto con la secretaría del centro educativo."}
 
 export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
     if (!(username && password)) {
-      res.status(400).send({"error":"Indica username y contraseña"});
+      res.status(400).send(msjError);
     } else {
       const user = await validateUser(username);
 
@@ -22,7 +23,7 @@ export const login = async (req, res) => {
 
         res.status(200).json(res_user);
       } else {
-        res.status(403).json({"error":"Credenciales inválidas"});
+        res.status(403).json(msjError);
       }
     }
   } catch (err) {
@@ -30,3 +31,4 @@ export const login = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
