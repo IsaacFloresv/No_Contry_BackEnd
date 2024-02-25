@@ -110,11 +110,12 @@ export const deleteUsers = async(req, res) => {
 }
 
 
+//Validacion de usuarios
 export const validateUser = async (username) => {
     let user= {};
     try {
         const resUser = await usersModel.findOne({
-            attributes: ['role','password'],
+            attributes: ['role','password','username','first_name','last_name','role','email','phone','grade','created_at','updated_at'],
             where:{username:username}
         })
         
